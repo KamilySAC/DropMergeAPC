@@ -1,0 +1,467 @@
+// KAMILY SILVA ANDRADE CRISPIM - 242009945
+
+#include <stdio.h>
+#include <stdlib.h>
+
+
+
+
+
+// Variáveis globais
+int PONTUACAO_FINAL = 0;
+int altura[5] = {0,0,0,0,0};
+
+
+
+
+
+
+
+
+//funcao que verifica em que parte da grid esta a posicao analisada
+int POSICAO_GRID(int i, int j){
+
+
+
+
+
+
+
+
+    if (i == 0) {  // linha mais baixa
+           if (j == 0) return 5;  // canto inf esquerdo
+           if (j == 4) return 6;  // canto inf direito
+           return 1;  // Linha baixa, sem ser canto
+   
+   
+       } else if (i == 9) {  // linha mais alta
+           if (j == 0) return 7;  // canto sup esquerdo
+           if (j == 4) return 8;  // canto sup direito
+           return 2;  // Linha alta, sem ser canto
+   
+   
+       } else if (j == 0) return 3;  // coluna mais à esquerda
+       else if (j == 4) return 4;  // coluna mais à direita
+       return 9;  // Caso do meio
+   }
+   
+   
+   //funcao para somar os blocos
+       int VIZINHOS(int i, int j, int matriz_jogo[10][5]){
+       //eu passo por cada posicoes vendo os vizinhos
+       //tem q  ver se a posicao na esta nos limitestes
+        int alterou = 0;
+        if(matriz_jogo[i][j] == 0){
+
+
+
+
+        return 0;
+       }
+       
+
+
+       int pgrid = POSICAO_GRID(i , j );
+       int combo = 1;
+   //depois de saber a posicao do elemento no espaco fisico da matriz, podemos ver os vizinhos
+   
+       if( (pgrid == 3)|| (pgrid == 7)|| (pgrid == 5)|| (pgrid == 9)|| (pgrid == 2)|| (pgrid == 1)){
+
+   
+           //verifica a dir
+
+           if(matriz_jogo[i][j+1] == matriz_jogo[i][j]){
+
+               combo*= 2;
+               matriz_jogo[i][j+1] = 0;
+               if(altura[j+1] == 1){
+
+
+                altura[j+1] = 0;
+               }
+           }
+   
+   
+       }
+   
+       if((pgrid == 2)|| (pgrid == 7)|| (pgrid == 3)|| (pgrid == 8)|| (pgrid == 9)|| (pgrid == 4)){
+
+
+   
+                   //verifica a embaixo
+                   if(matriz_jogo[i-1][j] == matriz_jogo[i][j]){
+
+   
+                       combo*= 2;
+                       matriz_jogo[i-1][j] = 0;
+                       
+                   }
+   
+       }
+   
+       if((pgrid == 8)|| (pgrid == 4)|| (pgrid == 6)|| (pgrid == 9)|| (pgrid == 2)|| (pgrid == 1)){
+   
+       
+   
+                   //verifica esq
+                   if(matriz_jogo[i][j-1] == matriz_jogo[i][j]){
+                
+   
+                       combo*= 2;
+                       matriz_jogo[i][j-1] = 0;
+                       if(altura[j-1] == 1){
+
+
+                altura[j-1] = 0;
+               }
+                   }
+       }
+           
+   
+       matriz_jogo[i][j] *= combo;
+       PONTUACAO_FINAL += matriz_jogo[i][j];
+
+
+       
+        return alterou;
+       }
+
+
+
+
+//funcao para cair os blocos
+void GRAVIDADE(int matriz_jogo[10][5]){
+
+
+
+
+for(int  j = 0 ; j < 5 ; j++){
+    int caiu;
+    do{
+       
+        caiu = 0;
+
+
+
+
+        for(int i = 0 ; i < 9 ; i++){
+
+
+
+
+
+
+
+
+        if((matriz_jogo[i][j] == 0) && (matriz_jogo[i+1][j] != 0)){
+
+
+
+
+
+
+
+
+            matriz_jogo[i][j] = matriz_jogo[i+1][j];
+            matriz_jogo[i+1][j] = 0;
+           
+       
+           
+            caiu = 1;
+        }
+        }
+
+
+
+
+        if(caiu){
+
+
+
+
+            altura[j]--;
+
+
+
+
+        }
+
+
+
+
+    }while(caiu == 1);
+
+
+}
+
+
+}
+
+
+//funcao que verifica se a vizinho precisa ser rodada de novo
+void REAC_CADEIRA(int matriz_jogo[10][5]){
+
+
+int m;
+do{
+m = 0;
+ for(int i = 0 ; i < 10 ; i++){
+         for(int j = 0 ; j < 5 ; j++){
+
+             m = VIZINHOS(i, j, matriz_jogo);
+
+
+            }
+             }
+
+
+GRAVIDADE(matriz_jogo);
+
+
+}while (m > 0 );
+
+
+}
+
+
+//funcao para ver se o jogador perdeu
+int GAME_OVER(int nro, int matriz_jogo[10][5]){
+
+
+    //se todas as colunas estiverem na altura max, e nro nao for igual a nenhum numero do topo, GAME OVER
+    for (int i = 0; i < 5; i++) {  
+        if (altura[i] < 10 || matriz_jogo[9][i] == nro) {  
+            return 0; // pode continuar o jogo
+        }
+    }
+    return 1; // quer dizer que todas as colunas estao cheias e nao ha mais possibilidade de jogo. Perdeu.
+
+
+
+
+}
+
+
+//funcao do Ranking
+void RANKING(){
+   
+     printf("\tA PONTUAÇÃO MÁXIMA É 409.600\n");
+            printf("\tPara voltar ao menu, pressione Enter. \n");
+            getchar();
+   
+}
+
+
+// Função que faz o bloco "cair" no lugar certo
+void COLOCANDO_BLOCO(int nro, int coluna, int matriz_jogo[10][5], int pos_preenchi ) {
+
+
+int h = altura[coluna -1];
+//vendo se ainda cabe blocos na coluna
+
+
+//se a coluna inteira estiver preenchida
+if (h == 10) {  
+
+
+        if (matriz_jogo[9][coluna - 1] == nro) {  // Se nro for igual ao elemento do topo
+           
+            matriz_jogo[9][coluna-1] += nro;
+
+
+        } else {  // Se não puder somar
+            printf("A coluna %d está cheia! Pressione Enter para escolher outra.\n", coluna);
+            getchar();
+            return;
+        }
+
+
+    } else {  // Se a coluna não estiver cheia, coloca o bloco normalmente
+        matriz_jogo[h][coluna - 1] = nro;
+        altura[coluna - 1]++;  // Atualiza a altura da coluna
+       
+
+
+        int lixo = VIZINHOS(h, coluna - 1, matriz_jogo);
+        GRAVIDADE(matriz_jogo);
+       
+        REAC_CADEIRA(matriz_jogo);
+       
+    }        
+
+
+}
+
+
+// Função para pedir o nome do usuário
+void NOME_USUARIO(char nome[]) {
+    printf("\n");
+    printf("Bem vindo(a) ao jogo DROP MERGE de APC!!!\n");
+    printf("\n");
+    printf("-Informe seu nickname:   \n");
+    printf("\n");
+    scanf(" %[^\n]s", nome);
+    getchar();
+    printf("\n");
+    printf("(pressione Enter para continuar)\n");
+    printf("\n");
+    getchar();
+}
+
+
+// Função para receber a coluna digitada pelo usuário
+int COLUNA_DIGITADA() {
+    int coluna;
+    printf("Insira a coluna em que o bloco cairá (Ou '0' para ir para o menu inicial): \n");
+    scanf("%d", &coluna);
+    getchar();
+   
+    if (coluna >= 1 && coluna <= 5) {
+        return coluna;  // Retorna a coluna válida
+    } else if (coluna == 0) {
+        return 0;
+    } else {
+        printf("Opção inválida, tente novamente!\n");
+        return COLUNA_DIGITADA();  // Chama a função novamente até obter entrada válida
+    }
+}
+
+
+// Função para limpar a tela
+void LIMPA_TELA() {
+#ifdef _WIN32
+    system("cls");
+#else
+    system("clear");
+#endif
+}
+
+
+// Função para mostrar o tabuleiro e capturar entrada do usuário
+void TABULEIRO(int nro, int nro_seguinte, int matriz_jogo[10][5], int pos_preenchi) {
+  while (1) {
+        LIMPA_TELA();
+        printf("           +----+  +----+\n");
+        printf("           |%4d|  |%4d|\n", nro, nro_seguinte);
+        printf("           +----+  +----+\n");
+
+
+        for (int i = 9; i >= 0; i--) {
+            printf("  +----+----+----+----+----+\n  |");
+            for (int j = 0; j < 5; j++) {
+                if (matriz_jogo[i][j] != 0)
+                    printf("%4d|", matriz_jogo[i][j]);
+                else
+                    printf("    |");
+            }
+            printf("\n");
+        }
+
+        printf("  +----+----+----+----+----+\n");
+        printf("  +----+----+----+----+----+\n");
+        printf("  |  1 |  2 |  3 |  4 |  5 |\n");
+        printf("  +----+----+----+----+----+\n\n");
+
+
+        if (GAME_OVER(nro, matriz_jogo)) {
+    printf("\n********** GAME OVER!!!!! **********\n");
+    printf("Aperte Enter para voltar ao menu.\n");
+    getchar();
+    return;
+    }
+        int coluna = COLUNA_DIGITADA();  
+
+
+        if (coluna == 0) {  
+            LIMPA_TELA();
+            return;  // Agora realmente sai para o menu
+        }
+
+        COLOCANDO_BLOCO(nro, coluna, matriz_jogo, pos_preenchi);
+        GRAVIDADE(matriz_jogo);
+       
+        // Atualiza os números para a próxima jogada
+        nro = nro_seguinte;
+        nro_seguinte = 2; // Ajuste conforme a lógica do jogo
+}
+}
+
+
+// Função que mostra o menu
+int MENU() {
+    int opcao;
+
+
+    printf("**********************************\n");
+    printf("*       Escolha uma opcao:       *\n");
+    printf("*                                *\n");
+    printf("* 1 - Jogar                      *\n");
+    printf("* 2 - Configuracoes              *\n");
+    printf("* 3 - Instrucoes                 *\n");
+    printf("* 4 - Ranking                    *\n");
+    printf("* 5 - Sair                       *\n");
+    printf("*                                *\n");
+    printf("**********************************\n");
+
+
+
+    scanf("%d", &opcao);
+    getchar();
+
+
+    if (opcao >= 1 && opcao <= 5) {
+        return opcao;
+    } else {
+        printf("Opcao invalida! Tente novamente!\n");
+        return MENU();
+    }
+}
+
+
+// Função principal
+int main() {
+    while (1) {
+        int menu = MENU();
+
+
+        if (menu == 3) {
+            printf("***     Instrucoes: O objetivo do jogo eh empilhar os blocos para combinar aqueles com valores iguais.  Quando isso acontece, os valores das pecas combinadas se somam, e a nova peca resultante representa a pontuacao ganha pelo jogador.  O desafio eh alcancar a maior pontuacao possivel antes que todos os espacos do tabuleiro estejam preenchidos, pois, caso isso ocorra, o jogador perde.   O jogador zera o jogo ao conseguir preencher toda a grade com as pecas fornecidas, alcancando a pontuacao maxima. Apos a pontuacao **** o jogador ganha um martelo para retirar uma celula casoa grid fique cheia.    ***\n");
+            printf("\n");
+            printf("(Pressione Enter para voltar ao menu.)\n");
+            getchar();
+
+
+        } else if (menu == 1) {
+            int nro = 2; int nro_seguinte = 2, pos_preenchi = 0;
+            int matriz_jogo[10][5] = {0};
+            char nome[100];
+           
+
+            for(int i = 0 ; i < 5 ; i++){
+
+
+                altura[i] = 0;
+            }
+
+
+            NOME_USUARIO(nome);
+            TABULEIRO(nro, nro_seguinte, matriz_jogo, pos_preenchi);
+
+
+        } else if (menu == 4) {
+           
+            RANKING();
+         
+        } else if (menu == 5) {
+            printf("Programa encerrado.\n");
+            break;
+
+        }else if(menu == 2){
+            //configuracoes
+        }
+
+
+    }
+
+    return 0;
+}
