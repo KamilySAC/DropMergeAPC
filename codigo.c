@@ -268,7 +268,11 @@ int VIZINHOS(int i, int j){
      
                 
        matriz_jogo[i][j] *= combo;
-       PONTUACAO_FINAL += matriz_jogo[i][j];
+      if(combo > 1){
+
+        PONTUACAO_FINAL += matriz_jogo[i][j];
+
+      } 
        VERIFICAR_MARTELO();
 
         return alterou;
@@ -545,7 +549,8 @@ if (arquivo_numeros == NULL) {
         printf("           |%4d|  |%4d|\n", nro, nro_seguinte);
         printf("           +----+  +----+\n");
         printf("Martelos: %d\n", MARTELOS); 
-
+        printf("Pontuação: %d\n", PONTUACAO_FINAL);
+        
         for (int i = 9; i >= 0; i--) {
             printf("  +----+----+----+----+----+\n  |");
             for (int j = 0; j < 5; j++) {
