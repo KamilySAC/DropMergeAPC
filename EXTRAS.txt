@@ -1,0 +1,5 @@
+Importante:
+
+ O VSCode não está rodando o código corretamente, recomendo rodar pelo terminal. O arquivo executável está na pasta.
+
+Atenciosamente, Kamily.
