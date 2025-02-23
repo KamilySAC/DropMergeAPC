@@ -23,12 +23,12 @@ struct dadosjogador {
 };
 
 
-// verifica quantos martelos tem
+// verifica quantos martelos tem q ganhar
 void VERIFICAR_MARTELO() {
-    // Verifica se o jogador ganhou um martelo
+    // 
     if (PONTUACAO_FINAL >= ULTIMA_PONTUACAO_MARTELO + PONTUACAO_PARA_MARTELO) {
-        MARTELOS++; // Incrementa o número de martelos
-        ULTIMA_PONTUACAO_MARTELO += PONTUACAO_PARA_MARTELO; // Atualiza a última pontuação em que o jogador ganhou um martelo
+        MARTELOS++; 
+        ULTIMA_PONTUACAO_MARTELO += PONTUACAO_PARA_MARTELO; 
     }
 }
 
@@ -41,7 +41,7 @@ void ORDENAR_RANKING(struct dadosjogador ranking[], int n) {
 
     for (j = 0; j < n; j++) {
         for (i = 0; i < n - 1; i++) {
-            if (ranking[i].pontuacao < ranking[i + 1].pontuacao) { // Ordena decrescente
+            if (ranking[i].pontuacao < ranking[i + 1].pontuacao) { 
                 aux = ranking[i];
                 ranking[i] = ranking[i + 1];
                 ranking[i + 1] = aux;
@@ -50,16 +50,16 @@ void ORDENAR_RANKING(struct dadosjogador ranking[], int n) {
     }
 }
 
-//funcao de elr ranking
+//mfuncao q mostra ranking
 void EXIBIR_RANKING() {
     FILE *arquivo_ranking;
-    struct dadosjogador ranking[100]; // Vetor para armazenar os dados do ranking
+    struct dadosjogador ranking[100]; 
     int n = 0;
 
     // Abre o arquivo para leitura
     arquivo_ranking = fopen("ranking.bin", "rb");
     if (arquivo_ranking == NULL) {
-        printf("Nenhum ranking disponível.\n");
+        printf("Nenhum ranking disponivel.\n");
         printf("(Pressione Enter para retornar)\n");
         getchar();
         return;
@@ -70,13 +70,13 @@ void EXIBIR_RANKING() {
         n++;
     }
 
-    // Fecha o arquivo
+    
     fclose(arquivo_ranking);
 
-    // Ordena o ranking
+    
     ORDENAR_RANKING(ranking, n);
 
-    // Exibe o ranking ordenado
+   
     printf("\n=== RANKING ===\n");
     for (int i = 0; i < n; i++) {
         printf("%d. %s - %d pontos\n", i + 1, ranking[i].nickname, ranking[i].pontuacao);
@@ -104,8 +104,8 @@ void SALVAR_RANKING() {
     }
 
     // Preenche a struct com os dados do jogador
-    strncpy(jogador.nickname, nome, 19); // Copia até 19 caracteres
-    jogador.nickname[19] = '\0'; // Garante que a string seja terminada
+    strncpy(jogador.nickname, nome, 19); 
+    jogador.nickname[19] = '\0'; 
     jogador.pontuacao = PONTUACAO_FINAL;
 
 
@@ -125,9 +125,9 @@ void SALVAR_RANKING() {
 int LER_PROXIMO_NUMERO() {
     int numero;
     if (fscanf(arquivo_numeros, "%d", &numero) == 1) {
-        return numero;  // Retorna o número lido
+        return numero; 
     } else {
-        return -1;  // Retorna -1 quando o arquivo acabar
+        return -1;  
     }
 }
 
@@ -300,8 +300,6 @@ for(int  j = 0 ; j < 5 ; j++){
         }
         }
 
-
-
         if(caiu){
 
 
@@ -346,7 +344,7 @@ int GAME_OVER(int nro){
             return 0; // pode continuar o jogo
         }
     }
-    return 1; // quer dizer que todas as colunas estao cheias e nao ha mais possibilidade de jogo. Perdeu.
+    return 1; //  Perdeu.
 
 
 
@@ -375,7 +373,7 @@ if (h == 10) {
             return 1;
 
         } else {  // Se não puder somar
-            printf("A coluna %d está cheia! Pressione Enter para escolher outra.\n", coluna);
+            printf("A coluna %d esta cheia! Pressione Enter para escolher outra.\n", coluna);
             getchar();
             return 0;
         }
@@ -415,16 +413,16 @@ void NOME_USUARIO(char nome[]) {
 // Função para receber a coluna digitada pelo usuário
 int COLUNA_DIGITADA() {
     int coluna;
-    printf("Insira a coluna em que o bloco cairá (Ou '0' para ir para o menu inicial): \n");
+    printf("Insira a coluna em que o bloco caira (Ou '0' para ir para o menu inicial): \n");
     scanf("%d", &coluna);
     getchar();
    
     if (coluna >= 1 && coluna <= 5) {
-        return coluna;  // Retorna a coluna válida
+        return coluna;  
     } else if (coluna == 0) {
         return 0;
     } else {
-        printf("Opção inválida, tente novamente!\n");
+        printf("Opção invalida, tente novamente!\n");
         return COLUNA_DIGITADA();  // Chama a função novamente até obter entrada válida
     }
 }
@@ -446,29 +444,30 @@ void USAR_MARTELO() {
 
     while (MARTELOS > 0) {
        
-        printf("*****Digite a linha e a coluna da célula que deseja martelar*****\n ");
+        printf("*****Digite a linha e a coluna da celula que deseja martelar*****\n ");
         printf("(Você tem %d martelos)\n ", MARTELOS);
         scanf("%d %d", &linha, &coluna);
-        getchar(); // Limpa o buffer do teclado
+        getchar(); 
 
         // Verifica se a linha e a coluna são válidas
         if (linha < 1 || linha > 10 || coluna < 1 || coluna > 5) {
-            printf("Posição inválida! Tente novamente.\n");
-            continue; // Volta ao início do loop
+            printf("Posicao invalida! Tente novamente.\n");
+            continue; 
+
         }
 
         // Converte para índices da matriz 
         linha--;
         coluna--;
 
-        // Elimina a célula
+        
         matriz_jogo[linha][coluna] = 0;
-        MARTELOS--; // Reduz o número de martelos
+        MARTELOS--; 
 
-        // Aplica a gravidade para fazer as células acima caírem
+       
         GRAVIDADE();
 
-        // Verifica combinações de vizinhos iguais
+       
         REAC_CADEIRA();
 
          // Exibe o grid atualizado
@@ -476,7 +475,7 @@ void USAR_MARTELO() {
          printf("           +----+  +----+\n");
          printf("           |%4d|  |%4d|\n", nro, nro_seguinte);
          printf("           +----+  +----+\n");
-         printf("Martelos: %d\n", MARTELOS); // Exibe o número de martelos
+         printf("Martelos: %d\n", MARTELOS);
  
          for (int i = 9; i >= 0; i--) {
              printf("  +----+----+----+----+----+\n  |");
@@ -497,13 +496,13 @@ void USAR_MARTELO() {
 
 
 
-        printf("Célula martelada com sucesso!\n");
+        printf("Celula martelada com sucesso!\n");
         printf("(Pressione Enter)\n");
         getchar();
     }
 
     if (MARTELOS == 0) {
-        printf("Você não tem mais martelos disponíveis!\n");
+        printf("Voce nao tem mais martelos disponiveis!\n");
         printf("(Pressione Enter)\n");
         getchar();
     }
@@ -519,8 +518,8 @@ void QUASE_GAME_OVER() {
 
         } else {
             
-            printf("Você não tem martelos disponíveis. Fim de jogo!\n");
-            break; // Sai do loop e encerra o jogo
+            printf("Voce nao tem martelos disponiveis. Fim de jogo!\n");
+            break; 
         }
     }
 }
@@ -532,7 +531,7 @@ void TABULEIRO(int pos_preenchi) {
 // Abre o arquivo
 arquivo_numeros = fopen("numeros.txt", "r");
 if (arquivo_numeros == NULL) {
-    printf("Erro ao abrir o arquivo de números!\n");
+    printf("Erro ao abrir o arquivo de numeros!\n");
     return;
 }
 
@@ -565,14 +564,14 @@ if (arquivo_numeros == NULL) {
 
    // Verifica se o jogador ganhou (arquivo acabou)
    if (nro == -1 || nro_seguinte == -1) {
-    printf("\n********** PARABÉNS! VOCÊ GANHOU! **********\n");
+    printf("\n********** PARABENS! VOCÊ GANHOU! **********\n");
     printf("\n");
-    printf("Todos os números do arquivo foram usados! Pressione Enter para voltar ao menu.\n");
+    printf("Todos os numeros do arquivo foram usados! Pressione Enter para voltar ao menu.\n");
     printf("\n");
     getchar();
-    fclose(arquivo_numeros);  // Fecha o arquivo
-    SALVAR_RANKING(); // salva pontuacao
-    return;  // Retorna ao menu principal
+    fclose(arquivo_numeros);  
+    SALVAR_RANKING(); 
+    return;  
 }
 
 if (GAME_OVER(nro)) {
@@ -585,7 +584,7 @@ if (GAME_OVER(nro)) {
     printf("Aperte Enter para voltar ao menu.\n");
     printf("\n");
     getchar();
-    fclose(arquivo_numeros);  // Fecha o arquivo
+    fclose(arquivo_numeros);  
     //SALVANDO RANKING
     SALVAR_RANKING();
     
@@ -597,7 +596,7 @@ if (GAME_OVER(nro)) {
 int coluna = COLUNA_DIGITADA();
 if (coluna == 0) {
     LIMPA_TELA();
-    fclose(arquivo_numeros);  // Fecha o arquivo
+    fclose(arquivo_numeros);  
     return;
 }
 
@@ -649,21 +648,21 @@ void MENU_CONFIGURACOES() {
 
     do {
         LIMPA_TELA();
-        printf("******CONFIGURAÇÕES ******\n");
+        printf("******CONFIGURACOES ******\n");
         printf("1 - Zerar Ranking     \n");
         printf("2 - Modo Dificuldade     \n");
         printf("3 - Voltar ao Menu Principal  \n");
         printf("\n");
         printf("Escolha uma opcao: ");
         scanf("%d", &opcao);
-        getchar(); // Limpa o buffer do teclado
+        getchar(); 
 
         switch (opcao) {
             case 1:
                 // Zerar Ranking
                 printf("Tem certeza que deseja zerar o ranking? (S/N): ");
-                scanf(" %c", &confirmacao); // Espaço antes do %c para ignorar espaços em branco
-                getchar(); // Limpa o buffer do teclado
+                scanf(" %c", &confirmacao); 
+                getchar(); 
 
                 if (confirmacao == 'S' || confirmacao == 's') {
                     if (remove("ranking.bin") == 0) {
@@ -671,12 +670,12 @@ void MENU_CONFIGURACOES() {
                         printf("(Pressione Enter para retornar)\n");
                         getchar();
                     } else {
-                        printf("Erro ao zerar o ranking. O arquivo pode não existir.\n");
+                        printf("Erro ao zerar o ranking. O arquivo pode nao existir.\n");
                         printf("(Pressione Enter para retornar)\n");
                         getchar();
                     }
                 } else {
-                    printf("Operação cancelada. O ranking não foi alterado.\n");
+                    printf("Operacao cancelada. O ranking nao foi alterado.\n");
                     printf("(Pressione Enter para retornar)\n");
                         getchar();
                 }
@@ -694,10 +693,10 @@ void MENU_CONFIGURACOES() {
 
             default:
           
-                printf("Opção inválida! Tente novamente.\n");
+                printf("Opcao invalida! Tente novamente.\n");
                 break;
         }
-    } while (opcao != 3); // Repete até o usuário escolher "Voltar ao Menu Principal"
+    } while (opcao != 3); 
 }
 
 // Função principal
@@ -706,7 +705,7 @@ int main() {
         int menu = MENU();
 
         if (menu == 3) {
-            printf("***     Instrucoes: O objetivo do jogo eh empilhar os blocos para combinar aqueles com valores iguais.  Quando isso acontece, os valores das pecas combinadas se somam, e a nova peca resultante representa a pontuacao ganha pelo jogador.  O desafio eh alcancar a maior pontuacao possivel antes que todos os espacos do tabuleiro estejam preenchidos, pois, caso isso ocorra, o jogador perde.   O jogador zera o jogo ao conseguir preencher toda a grade com as pecas fornecidas, alcancando a pontuacao maxima. Apos a pontuacao **** o jogador ganha um martelo para retirar uma celula casoa grid fique cheia.    ***\n");
+            printf("***     Instrucoes: O objetivo do jogo eh empilhar os blocos para combinar aqueles com valores iguais.  Quando isso acontece, os valores das pecas combinadas se somam, e a nova peca resultante representa a pontuacao ganha pelo jogador.  O desafio eh alcancar a maior pontuacao possivel antes que todos os espacos do tabuleiro estejam preenchidos, pois, caso isso ocorra, o jogador perde. Nesse caso, podera usar os martelinhos para eliminar celulas.  O jogador ganha o jogo ao conseguir preencher toda a grade com as pecas fornecidas, alcancando a pontuacao maxima. Apos a pontuacao 10.000 o jogador ganha um martelo para retirar uma celula caso a grid fique cheia.    ***\n");
             printf("\n");
             printf("(Pressione Enter para voltar ao menu.)\n");
             getchar();
@@ -742,4 +741,3 @@ int main() {
 
     return 0;
 }
-
