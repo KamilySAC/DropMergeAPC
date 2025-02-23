@@ -422,7 +422,7 @@ int COLUNA_DIGITADA() {
     } else if (coluna == 0) {
         return 0;
     } else {
-        printf("Opção invalida, tente novamente!\n");
+        printf("Opcao invalida, tente novamente!\n");
         return COLUNA_DIGITADA();  // Chama a função novamente até obter entrada válida
     }
 }
