@@ -445,7 +445,7 @@ void USAR_MARTELO() {
     while (MARTELOS > 0) {
        
         printf("*****Digite a linha e a coluna da celula que deseja martelar*****\n ");
-        printf("(Você tem %d martelos)\n ", MARTELOS);
+        printf("(Voce tem %d martelos)\n ", MARTELOS);
         scanf("%d %d", &linha, &coluna);
         getchar(); 
 
@@ -564,7 +564,7 @@ if (arquivo_numeros == NULL) {
 
    // Verifica se o jogador ganhou (arquivo acabou)
    if (nro == -1 || nro_seguinte == -1) {
-    printf("\n********** PARABENS! VOCÊ GANHOU! **********\n");
+    printf("\n********** PARABENS! VOCE GANHOU! **********\n");
     printf("\n");
     printf("Todos os numeros do arquivo foram usados! Pressione Enter para voltar ao menu.\n");
     printf("\n");
